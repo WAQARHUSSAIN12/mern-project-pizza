@@ -7,13 +7,14 @@ import orderRoute from "./route/orderRoutes.js";
 
 //import morgan from 'morgan';
 
-const port = process.env.API_PORT || 8080
 dotenv.config()
+app.use("/public",express.static("public"));
 //connect mongodb
 connectDB();
 
-const app = express();
+app.use(express.urlencoded({ extended: false }));
 
+const app = express();
 
 // middlewares
 app.use (express.json());
@@ -22,11 +23,11 @@ app.use('/api/pizzas' , pizzaRoute);
 app.use('/api/users' , userRoute);
 app.use('api/orders/' ,orderRoute);
 
-
-
 app.get('/', (req,res)=> {
   res.send("hello");
 })
+
+const port = process.env.API_PORT || 8080
 
 if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "staging") {
   app.use(express.static("frontend/build"));
